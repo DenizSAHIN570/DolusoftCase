@@ -26,7 +26,6 @@ Both services run in Docker containers, which allows for easy deployment and man
 - .NET 9.0 SDK: If you prefer to run the project without Docker, you will need to install .NET 9.0 SDK. You can get it from [here](https://dotnet.microsoft.com/download/dotnet).
 
 ## How to Run the Project
-// ... existing code ...
 
 ### Running with Docker
 
