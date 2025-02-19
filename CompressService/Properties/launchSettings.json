@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "CompressService": {
+      "commandName": "Project"
+    },
+    "Container (Dockerfile)": {
+      "commandName": "Docker"
+    }
+  }
+}

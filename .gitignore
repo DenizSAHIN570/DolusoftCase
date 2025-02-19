@@ -1,0 +1,54 @@
+# Build artifacts
+bin/
+obj/
+out/
+*.exe
+*.dll
+*.pdb
+*.log
+
+# Visual Studio files
+.vs/
+*.user
+*.suo
+*.vcxproj.user
+*.csproj.user
+
+# Rider and JetBrains files
+.idea/
+*.sln.iml
+
+# ASP.NET specific
+appsettings*.json
+
+# Dependencies
+packages/
+node_modules/
+*.nupkg
+project.lock.json
+
+# Logs, Database, and other generated files
+*.log
+*.sqlite
+*.sqlite3
+*.mdf
+*.ldf
+
+# Configurations
+*.config
+*.config.*
+appsettings.json
+appsettings.Development.json
+
+# Publish directory
+publish/
+wwwroot/
+
+# Resharper files
+_ReSharper*/
+*.DotSettings.user
+
+# Other user-specific files
+*.swp
+*.bak
+*.tmp
