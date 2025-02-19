@@ -1,28 +1,31 @@
-# See https://aka.ms/customizecontainer to learn how to customize your debug container and how Visual Studio uses this Dockerfile to build your images for faster debugging.
-
 # This stage is used when running from VS in fast mode (Default for Debug configuration)
 FROM mcr.microsoft.com/dotnet/runtime:9.0 AS base
 USER $APP_UID
 WORKDIR /app
 
-
 # This stage is used to build the service project
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["CompressService.csproj", "."]
-RUN dotnet restore "./CompressService.csproj"
+COPY ["ParserService/ParserService.csproj", "."]
+RUN dotnet restore "./ParserService.csproj"
 COPY . .
 WORKDIR "/src/."
-RUN dotnet build "./CompressService.csproj" -c $BUILD_CONFIGURATION -o /app/build
+RUN dotnet build "./ParserService.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 # This stage is used to publish the service project to be copied to the final stage
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./CompressService.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "./ParserService.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
 # This stage is used in production or when running from VS in regular mode (Default when not using the Debug configuration)
 FROM base AS final
 WORKDIR /app
+
+# Copy the published application files
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "CompressService.dll"]
+
+# Expose the Logs folder as a volume to be accessible outside the container
+VOLUME ["/app/Logs"]
+
+ENTRYPOINT ["dotnet", "ParserService.dll"]

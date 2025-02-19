@@ -1,0 +1,45 @@
+version: '3.8'
+
+networks:
+  log-processor-network:
+    driver: bridge
+
+services:
+  parser_service:
+    build:
+      context: .
+      dockerfile: ParserService/Dockerfile.parser
+    ports:
+      - "8080:80"
+    volumes:
+      - ./path/on/host/logs:/app/Logs #depending on the host machine, path needs to be changed
+    depends_on:
+      - redis
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - REDIS_CONNECTION=redis:6379 # The connection string to Redis service
+
+  compress_service:
+    build:
+      context: .
+      dockerfile: CompressService/Dockerfile.compress 
+    ports:
+      - "8081:80"
+    volumes:
+      - ./path/on/host/publish:/app/publish/output #depending on the host machine, path needs to be changed
+    depends_on:
+      - redis
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - REDIS_CONNECTION=redis:6379
+
+  redis:
+    image: "redis:latest"
+    ports:
+      - "6379:6379" # Exposes Redis on port 6379
+    volumes:
+      - redis-data:/data # Persistent storage for Redis data
+
+volumes:
+  redis-data:
+    driver: local
